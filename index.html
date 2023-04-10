@@ -80,7 +80,7 @@
             <div id="content" class="content"></div>
         </div>
         <div style="margin-top:10px;">
-            <button onclick="getWrap()">换一个</button>
+            <button id="change">换一个</button>
             <button id="crate">生成图片</button>
             <button id="btn">下载</button>
         </div>
@@ -92,12 +92,15 @@
             document.getElementById('date').innerHTML = `${now.getFullYear()}年${now.getMonth() + 1}月${now.getDate()}日`
 
             getWrap()
-
+f
             document.getElementById('crate').onclick = () => {
                 html2canvas(document.querySelector("#app")).then(canvas => {
                     document.body.appendChild(canvas)
                 })
             }
+
+            document.getElementById('change').onclick = throttle(test, 1000)
+
             document.getElementById('btn').onclick = () => {
                 const canvas = document.querySelector('canvas')
                 const el = document.createElement('a');
@@ -109,6 +112,19 @@
             }
         }
 
+        function throttle (func, delay) {
+            let timer = null;
+            return function () {
+                let context = this, args = [...arguments];
+                if (timer) return;
+                timer = setTimeout(function () {
+                    func.apply(context, args);
+                    timer = null;
+                }, delay)
+            }
+        }
+
+
         function getWrap () {
             fetch(`https://v2.alapi.cn/api/dog?token=RRsdW01VpyDN2Eaa`,)
                 .then(res => res.json())
@@ -116,7 +132,7 @@
                     if (data.code === 200) {
                         document.getElementById('content').innerHTML = data.data.content
                     } else {
-                        alert('接口次数超限')
+                        alert(data.msg)
                     }
                 })
         }
