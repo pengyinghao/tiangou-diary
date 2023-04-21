@@ -81,7 +81,7 @@
         </div>
         <div style="margin-top:10px;">
             <button id="change">换一个</button>
-            <button id="crate">生成图片</button>
+            <button id="create">生成图片</button>
             <button id="btn">下载</button>
         </div>
     </div>
@@ -93,7 +93,10 @@
 
             getWrap()
 
-            document.getElementById('crate').onclick = () => {
+            document.getElementById('create').onclick = () => {
+                const canvas = document.querySelector('canvas')
+                if (canvas) canvas.remove()
+                
                 html2canvas(document.querySelector("#app")).then(canvas => {
                     document.body.appendChild(canvas)
                 })
